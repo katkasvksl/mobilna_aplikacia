@@ -1,13 +1,13 @@
 import '../../shared/models/food_item.dart';
 
 class RefluxData {
-  static const String placeholderImage = 'https://placehold.co/400x300/F5F5F0/2D2D2D?text=Jedlo';
+  static const String placeholderImage = 'assets/images/pecena_zelenina.jpg';
 
   static final List<FoodItem> mockFoods = [
     FoodItem(
       id: '1',
       name: 'Ovsená kaša s banánom a čučoriedkami',
-      imageUrl: 'https://placehold.co/400x300/E8F5E9/2D2D2D?text=Ovsena+kasa',
+      imageUrl: 'assets/images/Oatmeal-.jpg',
       phValue: 6.5,
       fatLevel: 'low',
       overallAcidity: 'low',
@@ -34,7 +34,7 @@ class RefluxData {
     FoodItem(
       id: '2',
       name: 'Pečené kuracie stehno so zemiakovou kašou',
-      imageUrl: 'https://placehold.co/400x300/FFF3E0/2D2D2D?text=Kuracie+stehno',
+      imageUrl: 'assets/images/kuracie-na-prirodno-s-ryzou-.webp',
       phValue: 6.2,
       fatLevel: 'medium',
       overallAcidity: 'low',
@@ -61,7 +61,7 @@ class RefluxData {
     FoodItem(
       id: '3',
       name: 'Dusená treska s batátovým pyré',
-      imageUrl: 'https://placehold.co/400x300/E3F2FD/2D2D2D?text=Treska',
+      imageUrl: 'assets/images/recept-losos-v-rure.webp',
       phValue: 6.8,
       fatLevel: 'low',
       overallAcidity: 'low',
@@ -87,7 +87,7 @@ class RefluxData {
     FoodItem(
       id: '4',
       name: 'Omeleta z vajec so špenátom',
-      imageUrl: 'https://placehold.co/400x300/E8F5E9/2D2D2D?text=Omeleta',
+      imageUrl: 'assets/images/aesthetic_rezen.jpg',
       phValue: 6.5,
       fatLevel: 'low',
       overallAcidity: 'low',
@@ -113,7 +113,7 @@ class RefluxData {
     FoodItem(
       id: '5',
       name: 'Kuracie rizoto s hráškom a cuketou',
-      imageUrl: 'https://placehold.co/400x300/FFF3E0/2D2D2D?text=Rizoto',
+      imageUrl: 'assets/images/rizoto.jpg',
       phValue: 6.3,
       fatLevel: 'medium',
       overallAcidity: 'low',
@@ -140,7 +140,7 @@ class RefluxData {
     FoodItem(
       id: '6',
       name: 'Grilovaný losos s ryžou a zeleninou',
-      imageUrl: 'https://placehold.co/400x300/E3F2FD/2D2D2D?text=Losos',
+      imageUrl: 'assets/images/recept-losos-v-rure.webp',
       phValue: 6.5,
       fatLevel: 'medium',
       overallAcidity: 'low',
@@ -166,7 +166,7 @@ class RefluxData {
     FoodItem(
       id: '7',
       name: 'Banánové smoothie s ovsom',
-      imageUrl: 'https://placehold.co/400x300/E8F5E9/2D2D2D?text=Smoothie',
+      imageUrl: 'assets/images/banana.jpg',
       phValue: 5.8,
       fatLevel: 'low',
       overallAcidity: 'low',
@@ -192,7 +192,7 @@ class RefluxData {
     FoodItem(
       id: '8',
       name: 'Pečené jablko so škoricou',
-      imageUrl: 'https://placehold.co/400x300/FFF3E0/2D2D2D?text=Pecene+jablko',
+      imageUrl: 'assets/images/musly.jpg',
       phValue: 4.5,
       fatLevel: 'low',
       overallAcidity: 'low',
@@ -218,7 +218,7 @@ class RefluxData {
     FoodItem(
       id: '9',
       name: 'Zeleninová polievka s ryžovými rezancami',
-      imageUrl: 'https://placehold.co/400x300/E8F5E9/2D2D2D?text=Polievka',
+      imageUrl: 'assets/images/paradajkova_polievka.jpg',
       phValue: 6.4,
       fatLevel: 'low',
       overallAcidity: 'low',
@@ -245,7 +245,7 @@ class RefluxData {
     FoodItem(
       id: '10',
       name: 'Toasty s avokádom a vajíčkom',
-      imageUrl: 'https://placehold.co/400x300/E8F5E9/2D2D2D?text=Avokado+toast',
+      imageUrl: 'assets/images/zazvorova_kasa.jpg',
       phValue: 6.3,
       fatLevel: 'medium',
       overallAcidity: 'low',
@@ -271,7 +271,7 @@ class RefluxData {
     FoodItem(
       id: '11',
       name: 'Kuracie prsia s dusenou zeleninou',
-      imageUrl: 'https://placehold.co/400x300/E3F2FD/2D2D2D?text=Kuracie+prsia',
+      imageUrl: 'assets/images/dusena_zelenina.jfif',
       phValue: 6.5,
       fatLevel: 'low',
       overallAcidity: 'low',
@@ -297,7 +297,7 @@ class RefluxData {
     FoodItem(
       id: '12',
       name: 'Jogurtový dezert s granolou',
-      imageUrl: 'https://placehold.co/400x300/FFF3E0/2D2D2D?text=Jogurt',
+      imageUrl: 'assets/images/musly.jpg',
       phValue: 4.5,
       fatLevel: 'low',
       overallAcidity: 'medium',

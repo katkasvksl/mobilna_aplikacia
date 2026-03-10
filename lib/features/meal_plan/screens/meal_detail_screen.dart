@@ -86,12 +86,18 @@ class _MealDetailScreenState extends State<MealDetailScreen>
             height: height,
             width: double.infinity,
             color: AppColors.background,
-            child: food.imageUrl.isNotEmpty && food.imageUrl.startsWith('http')
-                ? Image.network(
-                    food.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, e, st) => _imagePlaceholder(),
-                  )
+            child: food.imageUrl.isNotEmpty
+                ? food.imageUrl.startsWith('http')
+                    ? Image.network(
+                        food.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, e, st) => _imagePlaceholder(),
+                      )
+                    : Image.asset(
+                        food.imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, e, st) => _imagePlaceholder(),
+                      )
                 : _imagePlaceholder(),
           ),
         ),

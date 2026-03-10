@@ -38,12 +38,18 @@ class FoodCard extends StatelessWidget {
                     top: Radius.circular(16),
                   ),
                 ),
-                child: food.imageUrl.isNotEmpty && food.imageUrl.startsWith('http')
-                    ? Image.network(
-                        food.imageUrl,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, e, st) => _placeholder(),
-                      )
+                child: food.imageUrl.isNotEmpty
+                    ? food.imageUrl.startsWith('http')
+                        ? Image.network(
+                            food.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, e, st) => _placeholder(),
+                          )
+                        : Image.asset(
+                            food.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, e, st) => _placeholder(),
+                          )
                     : _placeholder(),
               ),
             ),
@@ -143,12 +149,18 @@ class DashboardFoodCard extends StatelessWidget {
                 height: 110,
                 width: double.infinity,
                 color: AppColors.background,
-                child: food.imageUrl.isNotEmpty && food.imageUrl.startsWith('http')
-                    ? Image.network(
-                        food.imageUrl,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, e, st) => _placeholder(),
-                      )
+                child: food.imageUrl.isNotEmpty
+                    ? food.imageUrl.startsWith('http')
+                        ? Image.network(
+                            food.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, e, st) => _placeholder(),
+                          )
+                        : Image.asset(
+                            food.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, e, st) => _placeholder(),
+                          )
                     : _placeholder(),
               ),
             ),
