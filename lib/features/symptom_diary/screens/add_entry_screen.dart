@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/storage_service.dart';
 import '../../../shared/models/symptom_entry.dart';
+import '../../dashboard/providers/symptoms_provider.dart';
 
-class AddEntryScreen extends StatefulWidget {
+class AddEntryScreen extends ConsumerStatefulWidget {
   const AddEntryScreen({super.key});
 
   @override
-  State<AddEntryScreen> createState() => _AddEntryScreenState();
+  ConsumerState<AddEntryScreen> createState() => _AddEntryScreenState();
 }
 
-class _AddEntryScreenState extends State<AddEntryScreen> {
+class _AddEntryScreenState extends ConsumerState<AddEntryScreen> {
   int _overallRating = 3;
   final Set<String> _selectedSymptoms = {};
   TimeOfDay _selectedTime = TimeOfDay.now();
@@ -203,6 +205,9 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
     );
 
     await StorageService.saveSymptomEntry(entry);
+    
+    // Refresh the provider to update charts
+    ref.read(symptomsProvider.notifier).refresh();
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -238,4 +243,3 @@ class _AddEntryScreenState extends State<AddEntryScreen> {
     return AppColors.riskHigh;
   }
 }
-

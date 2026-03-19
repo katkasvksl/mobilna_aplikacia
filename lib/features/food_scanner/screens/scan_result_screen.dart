@@ -5,6 +5,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/services/claude_ai_service.dart';
 import '../../../shared/models/food_item.dart';
 import '../../../shared/widgets/risk_indicator_circle.dart';
+import '../../../shared/utils/number_formatting.dart';
 
 class ScanResultScreen extends StatefulWidget {
   final Uint8List? imageBytes;
@@ -281,7 +282,7 @@ class _ScanResultScreenState extends State<ScanResultScreen> {
                 Text(ingredient.name, style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 4),
                 Text(
-                  'pH ~${ingredient.phValue.toStringAsFixed(1)} · Tuk: ${AppColors.fatLabel(ingredient.fatLevel)} · Cukor: ${ingredient.sugarContent.toStringAsFixed(0)}g',
+                  'pH ~${formatMax2Decimals(ingredient.phValue)} · Tuk: ${AppColors.fatLabel(ingredient.fatLevel)} · Cukor: ${formatMax2Decimals(ingredient.sugarContent)}g',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],

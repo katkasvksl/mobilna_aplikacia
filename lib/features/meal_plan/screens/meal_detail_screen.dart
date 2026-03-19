@@ -4,6 +4,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/constants/reflux_data.dart';
 import '../../../shared/models/food_item.dart';
 import '../../../shared/widgets/risk_indicator_circle.dart';
+import '../../../shared/utils/number_formatting.dart';
 
 class MealDetailScreen extends StatefulWidget {
   final String foodId;
@@ -273,12 +274,12 @@ class _MealDetailScreenState extends State<MealDetailScreen>
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    _metricChip('pH ~${ingredient.phValue.toStringAsFixed(1)}', phColor),
+                    _metricChip('pH ~${formatMax2Decimals(ingredient.phValue)}', phColor),
                     const SizedBox(width: 6),
                     _metricChip('Tuk: ${AppColors.fatLabel(ingredient.fatLevel)}',
                         AppColors.riskColor(ingredient.fatLevel)),
                     const SizedBox(width: 6),
-                    _metricChip('Cukor: ${ingredient.sugarContent.toStringAsFixed(0)}g',
+                    _metricChip('Cukor: ${formatMax2Decimals(ingredient.sugarContent)}g',
                         AppColors.textSecondary),
                   ],
                 ),

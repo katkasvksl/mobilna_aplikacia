@@ -1,25 +1,27 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../core/services/storage_service.dart';
 import '../../../shared/models/symptom_entry.dart';
+import '../../dashboard/providers/symptoms_provider.dart';
 
-class DiaryScreen extends StatefulWidget {
+class DiaryScreen extends ConsumerStatefulWidget {
   const DiaryScreen({super.key});
 
   @override
-  State<DiaryScreen> createState() => _DiaryScreenState();
+  ConsumerState<DiaryScreen> createState() => _DiaryScreenState();
 }
 
-class _DiaryScreenState extends State<DiaryScreen> {
+class _DiaryScreenState extends ConsumerState<DiaryScreen> {
   int _selectedTab = 0; // 0=zoznam, 1=grafy
 
   @override
   Widget build(BuildContext context) {
-    final entries = StorageService.getAllSymptomEntries();
+    final entries = ref.watch(symptomsProvider);
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,10 +37,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     style: Theme.of(context).textTheme.displayMedium,
                   ),
                   IconButton(
-                    onPressed: () async {
-                      await context.push('/add-symptom');
-                      setState(() {}); // Refresh after adding
-                    },
+                    onPressed: () => context.push('/add-symptom'),
                     icon: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -130,7 +129,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
   Widget _entryCard(BuildContext context, SymptomEntry entry) {
     final ratingColor = entry.overallRating >= 4
         ? AppColors.riskLow
-        : entry.overallRating >= 2
+        : entry.overallRating >= 3
             ? AppColors.riskMedium
             : AppColors.riskHigh;
 
@@ -195,13 +194,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
   }
 
   Widget _buildCharts(List<SymptomEntry> entries) {
+    final weekGroups = _getWeekBarData(entries);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Týždenný prehľad',
+            'Týždenný prehľad (priemer)',
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 16),
@@ -209,67 +210,52 @@ class _DiaryScreenState extends State<DiaryScreen> {
             height: 220,
             padding: const EdgeInsets.all(16),
             decoration: AppTheme.cardDecoration,
-            child: BarChart(
-              BarChartData(
-                gridData: FlGridData(show: false),
-                borderData: FlBorderData(show: false),
-                titlesData: FlTitlesData(
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 28,
-                      interval: 1,
-                      getTitlesWidget: (value, meta) {
-                        return Text(
-                          value.toInt().toString(),
-                          style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
-                        );
-                      },
-                    ),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        const days = ['Po', 'Ut', 'St', 'Št', 'Pi', 'So', 'Ne'];
-                        final i = value.toInt();
-                        if (i >= 0 && i < days.length) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 8),
-                            child: Text(
-                              days[i],
-                              style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
-                            ),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                  ),
-                ),
-                maxY: 5,
-                barGroups: List.generate(7, (i) {
-                  final mockValues = [3.5, 4.0, 2.5, 3.0, 4.5, 3.8, 4.2];
-                  return BarChartGroupData(
-                    x: i,
-                    barRods: [
-                      BarChartRodData(
-                        toY: mockValues[i],
-                        color: mockValues[i] >= 4
-                            ? AppColors.riskLow
-                            : mockValues[i] >= 2.5
-                                ? AppColors.riskMedium
-                                : AppColors.riskHigh,
-                        width: 20,
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(6)),
+            child: weekGroups.isEmpty
+                ? const Center(child: Text('Žiadne dáta pre graf', style: TextStyle(color: AppColors.textSecondary)))
+                : BarChart(
+                    BarChartData(
+                      gridData: FlGridData(show: false),
+                      borderData: FlBorderData(show: false),
+                      titlesData: FlTitlesData(
+                        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 28,
+                            interval: 1,
+                            getTitlesWidget: (value, meta) {
+                              return Text(
+                                value.toInt().toString(),
+                                style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                              );
+                            },
+                          ),
+                        ),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              const days = ['Po', 'Ut', 'St', 'Št', 'Pi', 'So', 'Ne'];
+                              final i = value.toInt();
+                              if (i >= 0 && i < days.length) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Text(
+                                    days[i],
+                                    style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                                  ),
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            },
+                          ),
+                        ),
                       ),
-                    ],
-                  );
-                }),
-              ),
-            ),
+                      maxY: 5,
+                      barGroups: weekGroups,
+                    ),
+                  ),
           ),
           const SizedBox(height: 24),
           // Symptom frequency
@@ -278,13 +264,60 @@ class _DiaryScreenState extends State<DiaryScreen> {
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 12),
-          ..._getSymptomFrequency(entries).entries.map((e) {
-            return _symptomBar(e.key, e.value, entries.length);
-          }),
+          if (entries.isEmpty)
+            const Text('Zatiaľ žiadne zaznamenané symptómy', style: TextStyle(color: AppColors.textSecondary))
+          else
+            ..._getSymptomFrequency(entries).entries.map((e) {
+              return _symptomBar(e.key, e.value, entries.length);
+            }),
           const SizedBox(height: 20),
         ],
       ),
     );
+  }
+
+  List<BarChartGroupData> _getWeekBarData(List<SymptomEntry> entries) {
+    final now = DateTime.now();
+    final monday = DateTime(now.year, now.month, now.day).subtract(Duration(days: now.weekday - 1));
+    final groups = <BarChartGroupData>[];
+
+    bool hasAnyData = false;
+
+    for (int i = 0; i < 7; i++) {
+      final day = monday.add(Duration(days: i));
+      final dayEntries = entries.where((e) {
+        final d = e.timestamp;
+        return d.year == day.year && d.month == day.month && d.day == day.day;
+      }).toList();
+
+      double val = 0;
+      if (dayEntries.isNotEmpty) {
+        val = dayEntries.map((e) => e.overallRating).reduce((a, b) => a + b) / dayEntries.length;
+        hasAnyData = true;
+      }
+
+      groups.add(
+        BarChartGroupData(
+          x: i,
+          barRods: [
+            BarChartRodData(
+              toY: val,
+              color: val == 0 
+                  ? Colors.transparent 
+                  : val >= 4 
+                      ? AppColors.riskLow 
+                      : val >= 3 
+                          ? AppColors.riskMedium 
+                          : AppColors.riskHigh,
+              width: 18,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+            ),
+          ],
+        ),
+      );
+    }
+    
+    return hasAnyData ? groups : [];
   }
 
   Map<String, int> _getSymptomFrequency(List<SymptomEntry> entries) {
@@ -338,4 +371,3 @@ class _DiaryScreenState extends State<DiaryScreen> {
     return '${date.day}.${date.month}.${date.year} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 }
-
