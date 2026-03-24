@@ -83,7 +83,10 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/add-symptom',
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const AddEntryScreen(),
+      builder: (context, state) {
+        final initialNote = state.uri.queryParameters['initialNote'];
+        return AddEntryScreen(initialNote: initialNote);
+      },
     ),
     GoRoute(
       path: '/food-search',
@@ -160,4 +163,3 @@ class _ScaffoldWithNav extends StatelessWidget {
     }
   }
 }
-

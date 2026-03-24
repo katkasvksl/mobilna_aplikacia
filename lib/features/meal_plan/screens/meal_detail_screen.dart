@@ -73,6 +73,30 @@ class _MealDetailScreenState extends State<MealDetailScreen>
           ),
         ],
       ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              offset: const Offset(0, -4),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: ElevatedButton(
+            onPressed: () {
+              context.push('/add-symptom?initialNote=${Uri.encodeComponent(food.name)}');
+            },
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 54),
+            ),
+            child: const Text('Pridať do záznamu'),
+          ),
+        ),
+      ),
     );
   }
 
@@ -369,4 +393,3 @@ class _MealDetailScreenState extends State<MealDetailScreen>
     );
   }
 }
-

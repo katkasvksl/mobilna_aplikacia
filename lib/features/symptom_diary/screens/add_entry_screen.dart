@@ -8,7 +8,9 @@ import '../../../shared/models/symptom_entry.dart';
 import '../../dashboard/providers/symptoms_provider.dart';
 
 class AddEntryScreen extends ConsumerStatefulWidget {
-  const AddEntryScreen({super.key});
+  final String? initialNote;
+
+  const AddEntryScreen({super.key, this.initialNote});
 
   @override
   ConsumerState<AddEntryScreen> createState() => _AddEntryScreenState();
@@ -18,7 +20,13 @@ class _AddEntryScreenState extends ConsumerState<AddEntryScreen> {
   int _overallRating = 3;
   final Set<String> _selectedSymptoms = {};
   TimeOfDay _selectedTime = TimeOfDay.now();
-  final _notesController = TextEditingController();
+  late final TextEditingController _notesController;
+
+  @override
+  void initState() {
+    super.initState();
+    _notesController = TextEditingController(text: widget.initialNote);
+  }
 
   @override
   void dispose() {
